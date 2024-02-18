@@ -33,12 +33,12 @@ interface CustomField {
     Attr: { name: string, value: any }[]; // Array of attributes for the field
 }
 
-
 // Define the initial state values for the App component
 const initialFieldArr: FormElement[] = []; // Initial array of form elements
 const initialActivePage = "Connector"; // Initial active page
 const initialFormIsSelected = "NotForm"; // Initial form selection state
 
+// Define the App component
 const App = () => {
     // State variables
     const [activePage, setActivePage] = useState(initialActivePage); // State for active page
@@ -49,107 +49,107 @@ const App = () => {
 
     // Function to handle input change
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(event.target.value);
+        setInputValue(event.target.value);
     };
 
     // Function to handle button click for single object
     const handleSingleObjectButtonClick = async () => {
-      // Create new style
-      const hidden = await webflow.createStyle("Hidden field for " + inputValue);
-      await hidden.setProperty("display", "none")
+        // Create new style
+        const hidden = await webflow.createStyle("Hidden field for " + inputValue);
+        await hidden.setProperty("display", "none");
 
-      const el = await getSelectedElement(); // Get selected element
-      if (el && el.type === "FormForm") { // Check if element is a form
-          el.setCustomAttribute("data-sf-form-connection", "Lead-acc"); // set Connection Name
-          el.setCustomAttribute("data-sf-object", "Lead"); // set custom attribute based on selected object
-          fieldArr.forEach((field) =>{
-            const fieldEl = field.element
-            fieldEl?.setCustomAttribute('data-sf-field', field?.name)
-          })
+        const el = await getSelectedElement(); // Get selected element
+        if (el && el.type === "FormForm") { // Check if element is a form
+            el.setCustomAttribute("data-sf-form-connection", "Lead-acc"); // set Connection Name
+            el.setCustomAttribute("data-sf-object", "Lead"); // set custom attribute based on selected object
+            fieldArr.forEach((field) => {
+                const fieldEl = field.element;
+                fieldEl?.setCustomAttribute('data-sf-field', field?.name);
+            });
 
-           // Add custom dom element with predefined value
-          const newDiv = await el.append(webflow.elementPresets.DivBlock);
-          const newLabel = await newDiv.append(webflow.elementPresets.FormBlockLabel)
-          const newInput = await newDiv.append(webflow.elementPresets.DOM)
+            // Add custom dom element with predefined value
+            const newDiv = await el.append(webflow.elementPresets.DivBlock);
+            const newLabel = await newDiv.append(webflow.elementPresets.FormBlockLabel);
+            const newInput = await newDiv.append(webflow.elementPresets.DOM);
 
-          newDiv.setStyles([hidden])
-          newLabel.setTextContent('Company')
-          newInput.setAttribute('value',inputValue)
-          newInput.setTag('input')
-          newInput.setAttribute('type','text')
-          newInput.setAttribute('data-sf-field','Custom')
-      }
+            newDiv.setStyles([hidden]);
+            newLabel.setTextContent('Company');
+            newInput.setAttribute('value', inputValue);
+            newInput.setTag('input');
+            newInput.setAttribute('type', 'text');
+            newInput.setAttribute('data-sf-field', 'Custom');
+        }
     };
 
     // Function to handle button click for reference object
     const handleRefObjectButtonClick = async () => {
-      // Create new style
-      const hidden = await webflow.createStyle("Hidden field for " + inputValue);
-      await hidden.setProperty("display", "none")
+        // Create new style
+        const hidden = await webflow.createStyle("Hidden field for " + inputValue);
+        await hidden.setProperty("display", "none");
 
-      const el = await getSelectedElement(); // Get selected element
-      if (el && el.type === "FormForm") { // Check if element is a form
-          el.setCustomAttribute("data-sf-form-connection", "Lead-acc"); // set Connection Name
-          el.setCustomAttribute("data-sf-object", "Lead"); // Set custom attribute based on selected object
-          el.setCustomAttribute("data-sf-ref-object", "Account"); // Set reference object attribute
-          el.setCustomAttribute("data-sf-optional", "false"); // Set optional attribute
-          el.setCustomAttribute("data-sf-rel-type", "master-detail"); // Set relationship type attribute
-          fieldArr.forEach((field) =>{ // loop through each field
-            const fieldEl = field.element
-            if(field.type === "DOM"){
-              fieldEl?.setAttribute('data-sf-field', field?.name)  // Set salesforce field custom attribute
-              fieldEl?.setAttribute('data-sf-ref-field', field?.name)  // Set salesforce field custom attribute for reference object field
-            }else{
-              fieldEl?.setCustomAttribute('data-sf-field', field?.name)  // Set salesforce field custom attribute
-              fieldEl?.setCustomAttribute('data-sf-ref-field', field?.name)  // Set salesforce field custom attribute for reference object field
-            }
-          })
-          
-          // Add custom dom element with predefined value
-          const newDiv = await el.append(webflow.elementPresets.DivBlock);
-          const newLabel = await newDiv.append(webflow.elementPresets.FormBlockLabel)
-          const newInput = await newDiv.append(webflow.elementPresets.DOM)
-          const parentDivEl:any = newDiv.id
+        const el = await getSelectedElement(); // Get selected element
+        if (el && el.type === "FormForm") { // Check if element is a form
+            el.setCustomAttribute("data-sf-form-connection", "Lead-acc"); // set Connection Name
+            el.setCustomAttribute("data-sf-object", "Lead"); // Set custom attribute based on selected object
+            el.setCustomAttribute("data-sf-ref-object", "Account"); // Set reference object attribute
+            el.setCustomAttribute("data-sf-optional", "false"); // Set optional attribute
+            el.setCustomAttribute("data-sf-rel-type", "master-detail"); // Set relationship type attribute
+            fieldArr.forEach((field) => { // loop through each field
+                const fieldEl = field.element;
+                if (field.type === "DOM") {
+                    fieldEl?.setAttribute('data-sf-field', field?.name); // Set salesforce field custom attribute
+                    fieldEl?.setAttribute('data-sf-ref-field', field?.name); // Set salesforce field custom attribute for reference object field
+                } else {
+                    fieldEl?.setCustomAttribute('data-sf-field', field?.name); // Set salesforce field custom attribute
+                    fieldEl?.setCustomAttribute('data-sf-ref-field', field?.name); // Set salesforce field custom attribute for reference object field
+                }
+            });
 
-          await newDiv.setStyles([hidden])
-          await newLabel.setTextContent('Company')
-          await newInput.setAttribute('value',inputValue)
-          await newInput.setTag('input')
-          await newInput.setAttribute('type','text')
-          await newInput.setAttribute('data-sf-field','Custom SF field')
-          await newInput.setAttribute('data-sf-parentEl',parentDivEl.element)
-          getSelectedElement()
-      }
+            // Add custom dom element with predefined value
+            const newDiv = await el.append(webflow.elementPresets.DivBlock);
+            const newLabel = await newDiv.append(webflow.elementPresets.FormBlockLabel);
+            const newInput = await newDiv.append(webflow.elementPresets.DOM);
+            const parentDivEl: any = newDiv.id;
+
+            await newDiv.setStyles([hidden]);
+            await newLabel.setTextContent('Company');
+            await newInput.setAttribute('value', inputValue);
+            await newInput.setTag('input');
+            await newInput.setAttribute('type', 'text');
+            await newInput.setAttribute('data-sf-field', 'Custom SF field');
+            await newInput.setAttribute('data-sf-parentEl', parentDivEl.element);
+            getSelectedElement();
+        }
     };
 
     // Function to delete the whole connection
     const handleDeleteConnectionButtonClick = async () =>{
-      const allEl = await webflow.getAllElements()
-      formConnectionAttributes.forEach((connectionArr) => { // Iterate through formConnectionAttributes
-        const attributes = connectionArr.attributes; // Get attributes array from each connection
-        if(connectionArr.type === "Form Attr"){
-          attributes?.forEach((x:any) =>{
-            x.element.removeCustomAttribute(x.name)
-          })
-        }else{
-          attributes?.forEach((x) =>{
-            x.Attr.forEach(async (y:any) =>{
-              if(y.type === "DOM"){
-                if(y.name === "data-sf-parentEl"){
-                  const hiddenDiv:string = y.value
-                  const parentEl:any = allEl.filter(i => {
-                    const parentDivEl:any = i.id
-                    return parentDivEl.element === hiddenDiv
-                  })[0]
-                  await parentEl.remove()
-                }
-              }else{
-                y.element.removeCustomAttribute(y.name)                  
-              }
-            })
-          })
-        }
-      });
+        const allEl = await webflow.getAllElements();
+        formConnectionAttributes.forEach((connectionArr) => { // Iterate through formConnectionAttributes
+            const attributes = connectionArr.attributes; // Get attributes array from each connection
+            if (connectionArr.type === "Form Attr") {
+                attributes?.forEach((x:any) => {
+                    x.element.removeCustomAttribute(x.name);
+                });
+            } else {
+                attributes?.forEach((x) => {
+                    x.Attr.forEach(async (y:any) => {
+                        if (y.type === "DOM") {
+                            if (y.name === "data-sf-parentEl") {
+                                const hiddenDiv:string = y.value;
+                                const parentEl:any = allEl.filter(i => {
+                                    const parentDivEl:any = i.id;
+                                    return parentDivEl.element === hiddenDiv;
+                                })[0];
+                                await parentEl.remove();
+                            }
+                        } else {
+                            y.element.removeCustomAttribute(y.name);                  
+                        }
+                    });
+                });
+            }
+        });
     }
 
     // Fetch data on application load
@@ -189,24 +189,24 @@ const App = () => {
             const formCustomAttr = formCustomAttrAll.filter(attr => attr.name.toLowerCase().includes('-sf-')); // only target custom attribute related to Salesforce
             const sfFormCustomAttr: { name: string, value: any, element:{} }[] = [] 
             formCustomAttr.forEach((x)=>{
-              sfFormCustomAttr.push({ name: x.name, value: x.value, element: el });
+                sfFormCustomAttr.push({ name: x.name, value: x.value, element: el });
             })
             const fieldCustomAttr: CustomField[] = []; // Initialize array for field custom attributes
 
             newFieldArr.forEach(async (field) => { // Loop through new fields
-              const fieldEl = field.element; // Get field element
-              const fieldType = field.type; // Get field type
-              const individualFieldAttr: { name: string, value: any, element: any, type: string }[] = []; // Initialize array for individual field attributes
-              if (fieldEl) { // Check if fieldEl is defined
-                  const fieldCustomAttributesAll: { name: string, value: any }[] = fieldType === "DOM" ? await fieldEl.getAllAttributes() :await fieldEl.getAllCustomAttributes(); // Get all custom attributes
-                  const fieldCustomAttributes = fieldCustomAttributesAll.filter((attr:any) => attr.name.toLowerCase().includes('-sf-')); // only target custom attribute related to Salesforce
-                  if (fieldCustomAttributes) {
-                      fieldCustomAttributes.forEach((x:any) => {
-                          individualFieldAttr.push({ name: x.name, value: x.value, element: fieldEl, type: fieldType }); // Push individual attribute to array
-                      });
-                  }
-              }
-              fieldCustomAttr.push({ name: field.name, 'Attr': individualFieldAttr }); // Push custom attribute to array
+                const fieldEl = field.element; // Get field element
+                const fieldType = field.type; // Get field type
+                const individualFieldAttr: { name: string, value: any, element: any, type: string }[] = []; // Initialize array for individual field attributes
+                if (fieldEl) { // Check if fieldEl is defined
+                    const fieldCustomAttributesAll: { name: string, value: any }[] = fieldType === "DOM" ? await fieldEl.getAllAttributes() :await fieldEl.getAllCustomAttributes(); // Get all custom attributes
+                    const fieldCustomAttributes = fieldCustomAttributesAll.filter((attr:any) => attr.name.toLowerCase().includes('-sf-')); // only target custom attribute related to Salesforce
+                    if (fieldCustomAttributes) {
+                        fieldCustomAttributes.forEach((x:any) => {
+                            individualFieldAttr.push({ name: x.name, value: x.value, element: fieldEl, type: fieldType }); // Push individual attribute to array
+                        });
+                    }
+                }
+                fieldCustomAttr.push({ name: field.name, 'Attr': individualFieldAttr }); // Push custom attribute to array
             });
 
             const structuredAttributes = [ // Create structured attributes array
