@@ -83,10 +83,6 @@ const App = () => {
 
     // Function to handle button click for reference object
     const handleRefObjectButtonClick = async () => {
-        // Create new style
-        const hidden = await webflow.createStyle("Hidden field for " + inputValue);
-        await hidden.setProperty("display", "none");
-
         const el = await getSelectedElement(); // Get selected element
         if (el && el.type === "FormForm") { // Check if element is a form
             el.setCustomAttribute("data-sf-form-connection", "Lead-acc"); // set Connection Name
@@ -106,6 +102,10 @@ const App = () => {
             });
 
             // Add custom dom element with predefined value
+            // Create new style
+            const hidden = await webflow.createStyle("Hidden field for " + inputValue);
+            await hidden.setProperty("display", "none");
+
             const newDiv = await el.append(webflow.elementPresets.DivBlock);
             const newLabel = await newDiv.append(webflow.elementPresets.FormBlockLabel);
             const newInput = await newDiv.append(webflow.elementPresets.DOM);
@@ -157,6 +157,7 @@ const App = () => {
         const fetchAppData = async () => {
             try {
                 // Code for fetching site info, pages, and switching pages can be added here
+                
             } catch (error) {
                 console.error("Error fetching site info:", error);
             }
