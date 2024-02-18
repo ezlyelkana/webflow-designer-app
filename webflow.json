@@ -1,0 +1,6 @@
+{
+    "name": "salesforce-app",
+    "publicDir": "dist",
+    "size": "large",
+    "apiVersion": "2"
+}
